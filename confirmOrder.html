@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragments :: page_head('Order')"></head>
+<body>
+
+<header th:replace="fragments :: header"></header>
+
+<p class="my_account">My Cart</p>
+<form th:action="@{/cart/add-order}" method="post">
+    <input type="hidden" th:each="cart, cartStat : ${listCartOfId}"
+           th:name="'listCartOfId[' + ${cartStat.index} + ']'" th:value="${cart}" />
+    <div class="content_table">
+        <table class="table">
+            <thead>
+            <tr class="name_column">
+                <th scope="col"></th>
+                <th scope="col">PRODUCT_NAME</th>
+                <th scope="col">QUANTITY</th>
+                <th>COST</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="cart : ${listCartOfId}">
+                <td><img th:src="@{${cart.product.photosImagePath}}" alt="" class="img"></td>
+                <td>[[${cart.product.name}]]</td>
+                <td>
+                    [[${cart.quantity}]]
+                </td>
+                <td>
+                    $[[${cart.product.price*cart.quantity}]]
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+        <div>
+            <label style="width: 80%; font-size: 3rem;">
+                DELIVERY:
+                <br>
+                <input type="text" th:value="${delivery}" name="delivery" style="width: 100%; font-size: 2.5rem;" minlength="8"
+                       maxlength="255">
+            </label>
+            <div class="result-highlight" style="
+                display: flex;
+                justify-content: right;
+                font-size: 4rem;
+                color: #d43d5d;
+            ">TOTAL: $[[${total}]]</div>
+        </div>
+        <input type="submit" class="checkout" id="checkoutButton" value="CHECKOUT">
+    </div>
+</form>
+
+
+<div th:replace="fragments :: footer" style="margin-top: 400px;"></div>
+<script th:src = "@{/JS/index.js}"></script>
+</body>
+</html>
